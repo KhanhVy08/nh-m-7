@@ -8,7 +8,7 @@ go
 CREATE TABLE TaiKhoan (
     MaTaiKhoan INT PRIMARY KEY IDENTITY(1,1),
     HoTen VARCHAR(50) NOT NULL,
-    GioiTinh CHAR(3) NOT NULL CHECK(GioiTinh IN(N'Nam',N'Nữ'))
+    GioiTinh CHAR(3) NOT NULL CHECK(GioiTinh IN(N'Nam',N'Nữ')),
     Email VARCHAR(30) UNIQUE NOT NULL,
     MatKhau VARCHAR(50) NOT NULL, 
     VaiTro NVARCHAR(100) NOT NULL CHECK(VaiTro IN(N'Người dùng',N'Quản trị viên',N'Chuyên viên')), 
@@ -63,7 +63,7 @@ CREATE TABLE ChungChi (
     MaTaiKhoan INT NOT NULL,
     MaKhoaHoc INT NOT NULL,
     NgayCap DATE NOT NULL,
-    Theloai String NOT NULL,
+    Theloai NVARCHAR(MAX) NOT NULL,
     FOREIGN KEY (MaTaiKhoan) REFERENCES NguoiDung(MaTaiKhoan),
     FOREIGN KEY (MaKhoaHoc) REFERENCES KhoaHoc(MaKhoaHoc)
 );

@@ -1,27 +1,25 @@
-﻿create database Ung_Dung_Dao_Tao_Chung_Chi_Tieng_Anh
+CREATE DATABASE Ung_Dung_Dao_Tao_Chung_Chi_Tieng_Anh;
 
-go 
-use Ung_Dung_Dao_Tao_Chung_Chi_Tieng_Anh
-go
+USE Ung_Dung_Dao_Tao_Chung_Chi_Tieng_Anh;
 
 -- Tạo bảng TaiKhoan
 CREATE TABLE TaiKhoan (
-    MaTaiKhoan INT PRIMARY KEY IDENTITY(1,1),
+    MaTaiKhoan INT AUTO_INCREMENT PRIMARY KEY,
     HoTen VARCHAR(50) NOT NULL,
-    GioiTinh CHAR(3) NOT NULL CHECK(GioiTinh IN(N'Nam',N'Nữ')),
+    GioiTinh CHAR(3) NOT NULL,
     Email VARCHAR(30) UNIQUE NOT NULL,
     MatKhau VARCHAR(50) NOT NULL, 
-    VaiTro NVARCHAR(100) NOT NULL CHECK(VaiTro IN(N'Người dùng',N'Quản trị viên',N'Chuyên viên')), 
+    VaiTro VARCHAR(100) NOT NULL, 
     SoDienThoai VARCHAR(10) NOT NULL, 
     NgaySinh DATE NOT NULL,
     NgayDangKy DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tạo bảng Khóa học
+-- Tạo bảng KhoaHoc
 CREATE TABLE KhoaHoc (
-    MaKhoaHoc INT PRIMARY KEY IDENTITY(1,1),
+    MaKhoaHoc INT PRIMARY KEY AUTO_INCREMENT,
     TenKhoaHoc VARCHAR(100) NOT NULL,
-    MoTa NVARCHAR(MAX),
+    MoTa TEXT, -- Sửa thành TEXT thay cho VARCHAR(MAX)
     ThoiLuong INT NOT NULL,
     HocPhi DECIMAL(10, 2) NOT NULL,
     NgayBatDau DATE NOT NULL,
@@ -30,25 +28,25 @@ CREATE TABLE KhoaHoc (
 
 -- Tạo bảng Bài học
 CREATE TABLE BaiHoc (
-    MaBaiHoc INT PRIMARY KEY IDENTITY(1,1),
+    MaBaiHoc INT PRIMARY KEY AUTO_INCREMENT,
     MaKhoaHoc INT NOT NULL,
     TieuDe VARCHAR(100) NOT NULL,
-    NoiDung NVARCHAR(MAX),
+    NoiDung TEXT,
     FOREIGN KEY (MaKhoaHoc) REFERENCES KhoaHoc(MaKhoaHoc)
 );
 
 -- Tạo bảng Bài kiểm tra
 CREATE TABLE BaiKiemTra (
-    MaBaiKiemTra INT PRIMARY KEY IDENTITY(1,1),
+    MaBaiKiemTra INT PRIMARY KEY AUTO_INCREMENT,
     MaKhoaHoc INT NOT NULL,
-    LoaiBaiKiemTra NVARCHAR(100) NOT NULL CHECK(LoaiBaiKiemTra IN(N'Đầu vào',N'Giữa kỳ',N'Cuối kỳ')),
+    LoaiBaiKiemTra VARCHAR(100) NOT NULL,
     ThoiGian INT NOT NULL,
     FOREIGN KEY (MaKhoaHoc) REFERENCES KhoaHoc(MaKhoaHoc)
 );
 
 -- Tạo bảng Kết quả kiểm tra
 CREATE TABLE KetQuaKiemTra (
-    MaKetQua INT PRIMARY KEY IDENTITY(1,1),
+    MaKetQua INT PRIMARY KEY AUTO_INCREMENT,
     MaBaiKiemTra INT NOT NULL,
     MaTaiKhoan INT NOT NULL,
     DiemSo DECIMAL(5, 2) NOT NULL,
@@ -59,22 +57,22 @@ CREATE TABLE KetQuaKiemTra (
 
 -- Tạo bảng Chứng chỉ
 CREATE TABLE ChungChi (
-    MaChungChi INT PRIMARY KEY IDENTITY(1,1),
+    MaChungChi INT PRIMARY KEY AUTO_INCREMENT,
     MaTaiKhoan INT NOT NULL,
     MaKhoaHoc INT NOT NULL,
     NgayCap DATE NOT NULL,
-    Theloai NVARCHAR(MAX) NOT NULL,
-    FOREIGN KEY (MaTaiKhoan) REFERENCES NguoiDung(MaTaiKhoan),
+    Theloai TEXT NOT NULL,
+    FOREIGN KEY (MaTaiKhoan) REFERENCES TaiKhoan(MaTaiKhoan), -- Sửa tham chiếu từ NguoiDung thành TaiKhoan
     FOREIGN KEY (MaKhoaHoc) REFERENCES KhoaHoc(MaKhoaHoc)
 );
 
 -- Tạo bảng Đăng ký khóa học
 CREATE TABLE DangKyKhoaHoc (
-    MaDangKy INT PRIMARY KEY IDENTITY(1,1),
+    MaDangKy INT PRIMARY KEY AUTO_INCREMENT,
     MaTaiKhoan INT NOT NULL,
     MaKhoaHoc INT NOT NULL,
     NgayDangKy DATETIME DEFAULT CURRENT_TIMESTAMP,
-    TrangThai NVARCHAR(100) CHECK(TrangThai IN(N'Đang học', N'Hoàn thành', N'Hủy bỏ')),
+    TrangThai VARCHAR(100) NOT NULL, -- Loại bỏ CHECK nếu không chắc chắn về hỗ trợ
     FOREIGN KEY (MaTaiKhoan) REFERENCES TaiKhoan(MaTaiKhoan),
     FOREIGN KEY (MaKhoaHoc) REFERENCES KhoaHoc(MaKhoaHoc)
 );
